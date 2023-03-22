@@ -1,11 +1,13 @@
-import threading
-import win32con
-import win32api, win32gui
+import datetime
 import random
+import threading
 import time
 import tkinter as tk
+
 import pyautogui
-import datetime
+import win32api
+import win32con
+import win32gui
 
 # from PyQt5.QtWidgets import QApplication
 # from PyQt5.QtGui import *
@@ -126,8 +128,6 @@ def get_rw_2(rwm, myConfidence):
 # 等待直到打开活动界面
 def open_huodong():
     global is_start
-    global huodongX
-    global huodongY
     is_start = True
     time.sleep(1)  # 等待1秒
     huodongX = window_region[0] + window_region[2] / 2
@@ -157,6 +157,7 @@ def do_action():
         flag = 1
         time.sleep(0.1)
     elif get_rw("goumai"):  # 购买物品
+        #:todo 同时还应该查看是否展示了 请选择物品 判断是否东西呗抢先购买了情况 然后关闭界面
         flag = 1
         time.sleep(0.1)
     elif get_rw("goumai2"):  # 购买物品摆摊购买
@@ -203,8 +204,13 @@ def do_action():
     elif get_rw("chongshi"):  # 重连失败重试
         flag = 1
         time.sleep(0.1)
-    #防止出现卡界面的情况
-    click(huodongX,huodongY)
+    elif get_rw("dianjiFlag"):  # 一种做师门时候卡界面问题
+        flag = 1
+        time.sleep(0.1)
+    # elif not findpng("huodong.png"):
+    #     # 防止出现卡界面的情况 在活动都找不到的情况就随意点一下位置
+    #     # click(huodongX, huodongY+300)
+    #     print("应该随机点击")
 
     return flag
 
@@ -233,8 +239,8 @@ def shi_men(window_size):
             time.sleep(1)
 
         result = do_action()
-        # if findpng("renwu.png") is True and result == 0 and flag == 0:
-        if result == 0 and flag == 0:
+        if findpng("renwu.png") is not None and result == 0 and flag == 0:
+            # if result == 0 and flag == 0:
             button_shimen["text"] = "师门（结束）"
             break
         time.sleep(1)
@@ -305,7 +311,7 @@ def bao_tu(window_size):
     is_start = True
     open_huodong()
     get_rw("richanghuodong")
-    if not get_rw_2("baotu_rw",0.8):
+    if not get_rw_2("baotu_rw", 0.8):
         print("宝图任务已完成")
         button_baotu["text"] = "宝图（已完成）"
         return
@@ -316,8 +322,9 @@ def bao_tu(window_size):
 
     time.sleep(1)
     get_rw("renwu")  # 打开任务
-    get_rw("btrw")  #打开宝图任务
-    get_rw("mscs")  #点击马上传送
+    get_rw("btrw")  # 打开宝图任务
+    get_rw("mscs")  # 点击马上传送
+    get_rw("guanbi")  # 关闭窗口
     time.sleep(1)
     button_baotu["text"] = "宝图（已完成）"
 
@@ -326,14 +333,20 @@ def bao_tu(window_size):
 def yun_biao(window_size):
     global is_start
     is_start = True
+    yunbiaoCount = 0
     button_yunbiao["text"] = "运镖（进行中）"
     while is_start:
         open_huodong()
+        get_rw("richanghuodong")
         if get_rw("yunbiao_rw"):
             time.sleep(1)
             get_rw("yasong")
+            clickd = get_rw("queding")
+            if clickd is True :
+                yunbiaoCount = yunbiaoCount + 1
+            get_rw("guanbi")  # 关闭窗口
             time.sleep(1)
-        else:
+        elif yunbiaoCount >= 3:
             button_yunbiao["text"] = "运镖（已完成）"
             break
 
@@ -450,8 +463,6 @@ if __name__ == "__main__":
     button_baotu = tk.Button(root, text="宝图", command=lambda: MyThread(bao_tu, window_size), width=15, height=2)
     button_baotu.place(relx=0.4, rely=0.55, width=200)
     button_baotu.pack()
-
-
 
     button_yunbiao = tk.Button(root, text="运镖", command=lambda: MyThread(yun_biao, window_size), width=15, height=2)
     button_yunbiao.place(relx=0.4, rely=0.55, width=200)
