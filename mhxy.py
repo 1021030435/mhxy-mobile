@@ -31,8 +31,11 @@ def resolution():  # 获取屏幕分辨率
 # 获取梦幻西游窗口信息吗，返回一个矩形窗口四个坐标
 def get_window_info():
     global handle
-    wdname = u'梦幻西游 - MuMu模拟器'
+    # windows = pyautogui.getAllWindows()
+    # wdname = u'梦幻西游 - MuMu模拟器'
+    wdname = "雷电模拟器"
     handle = win32gui.FindWindow(0, wdname)  # 获取窗口句柄
+
     if handle == 0:
         # text.insert('end', '提示：请打开梦幻西游\n')
         # text.see('end')  # 自动显示底部
