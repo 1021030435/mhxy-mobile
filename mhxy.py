@@ -31,7 +31,7 @@ def resolution():  # 获取屏幕分辨率
 # 获取梦幻西游窗口信息吗，返回一个矩形窗口四个坐标
 def get_window_info():
     global handle
-    # windows = pyautogui.getAllWindows()
+    windows = pyautogui.getAllWindows()
     # wdname = u'梦幻西游 - MuMu模拟器'
     wdname = "雷电模拟器"
     handle = win32gui.FindWindow(0, wdname)  # 获取窗口句柄
@@ -77,7 +77,7 @@ def move_click(x, y, t=0):  # 移动鼠标并点击左键
 # 找指定任务
 def findpng(Pngfile):
     global window_region
-    myConfidence = 0.75
+    myConfidence = 0.8
     pyautogui.FAILSAFE = False
     result = pyautogui.locateOnScreen('images\\' + Pngfile, region=window_region, confidence=myConfidence)
     return result
@@ -159,13 +159,14 @@ def do_action():
     elif get_rw("shiyong"):  # 使用物品
         flag = 1
         time.sleep(0.1)
-    elif get_rw("goumai"):  # 购买物品
-        #:todo 同时还应该查看是否展示了 请选择物品 判断是否东西呗抢先购买了情况 然后关闭界面
+    elif get_rw("goumai")or get_rw("goumai1") or get_rw("goumai2") or get_rw("goumai3"):  # 购买物品
+        # 同时还应该查看是否展示了 请选择物品 判断是否东西呗抢先购买了情况 然后关闭界面
+        get_rw("guanbi") or get_rw("guanbi_1") or get_rw("guanbi_2") or get_rw("guanbi_3")
         flag = 1
         time.sleep(0.1)
-    elif get_rw("goumai2"):  # 购买物品摆摊购买
-        flag = 1
-        time.sleep(0.1)
+    # elif get_rw("goumai2"):  # 购买物品摆摊购买
+    #     flag = 1
+    #     time.sleep(0.1)
     elif get_rw("juanxian"):  # 捐献
         flag = 1
         time.sleep(0.1)
@@ -313,6 +314,7 @@ def bao_tu(window_size):
     global is_start
     is_start = True
     open_huodong()
+    time.sleep(0.2)
     get_rw("richanghuodong")
     if not get_rw_2("baotu_rw", 0.8):
         print("宝图任务已完成")
@@ -323,8 +325,9 @@ def bao_tu(window_size):
     if not get_rw("choice_do") or get_rw("choice_do1"):
         print("未找到选择要做的事")
 
-    time.sleep(1)
+    time.sleep(10)
     get_rw("renwu")  # 打开任务
+    get_rw("dqrw")  # 打开任务
     get_rw("btrw")  # 打开宝图任务
     get_rw("mscs")  # 点击马上传送
     get_rw("guanbi")  # 关闭窗口
