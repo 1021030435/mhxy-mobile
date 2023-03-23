@@ -159,7 +159,7 @@ def do_action():
     elif get_rw("shiyong"):  # 使用物品
         flag = 1
         time.sleep(0.1)
-    elif get_rw("goumai")or get_rw("goumai1") or get_rw("goumai2") or get_rw("goumai3"):  # 购买物品
+    elif get_rw("goumai") or get_rw("goumai1") or get_rw("goumai2") or get_rw("goumai3"):  # 购买物品
         # 同时还应该查看是否展示了 请选择物品 判断是否东西呗抢先购买了情况 然后关闭界面
         get_rw("guanbi") or get_rw("guanbi_1") or get_rw("guanbi_2") or get_rw("guanbi_3")
         flag = 1
@@ -248,6 +248,37 @@ def shi_men(window_size):
             button_shimen["text"] = "师门（结束）"
             break
         time.sleep(1)
+
+
+def mijing(window_size):
+    global is_start
+    is_start = True
+    open_huodong()
+    if not get_rw("richanghuodong"):
+        print("打开日常活动失败")
+        return
+    if not get_rw("mjxy"):
+        print("秘境打开失败")
+        button_shimen["text"] = "秘境（执行失败）"
+        return
+    if not get_rw("mjxy2"):
+        print("秘境选择界面打开失败")
+        button_shimen["text"] = "秘境（执行失败）"
+        return
+    if not get_rw("mjxy3") or get_rw("mjxy4"):
+        print("秘境选择怪物失败")
+        button_shimen["text"] = "秘境（执行失败）"
+        return
+    if not get_rw("tiaozhan"):
+        print("秘境挑战怪物失败")
+        button_shimen["text"] = "秘境（执行失败）"
+        return
+
+    button_mijing["text"] = "秘境（执行中）"
+    for i in range(1, 100):
+        get_rw("mjxy_rw")
+        get_rw("jinruzhandou")
+        time.sleep(6)
 
 
 # 抓鬼
@@ -348,7 +379,7 @@ def yun_biao(window_size):
             time.sleep(1)
             get_rw("yasong")
             clickd = get_rw("queding")
-            if clickd is True :
+            if clickd is True:
                 yunbiaoCount = yunbiaoCount + 1
             get_rw("guanbi")  # 关闭窗口
             time.sleep(1)
@@ -469,6 +500,10 @@ if __name__ == "__main__":
     button_baotu = tk.Button(root, text="宝图", command=lambda: MyThread(bao_tu, window_size), width=15, height=2)
     button_baotu.place(relx=0.4, rely=0.55, width=200)
     button_baotu.pack()
+
+    button_mijing = tk.Button(root, text="秘境", command=lambda: MyThread(mijing, window_size), width=15, height=2)
+    button_mijing.place(relx=0.4, rely=0.55, width=200)
+    button_mijing.pack()
 
     button_yunbiao = tk.Button(root, text="运镖", command=lambda: MyThread(yun_biao, window_size), width=15, height=2)
     button_yunbiao.place(relx=0.4, rely=0.55, width=200)
