@@ -279,6 +279,8 @@ def mijing(window_size):
         get_rw("mjxy_rw")
         get_rw("jinruzhandou")
         time.sleep(6)
+    # 退出秘境
+    get_rw("mijinglikai")
 
 
 # 抓鬼
