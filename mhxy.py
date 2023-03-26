@@ -423,6 +423,17 @@ def do_all():
     return
 
 
+def jumpQueue():
+    global is_start
+    is_start = True
+    while is_start:
+        get_rw("jq1")
+        time.sleep(2)
+        if get_rw("jq2"):
+            get_rw("jq3")
+            get_rw("jq4")
+
+
 def stop():
     global is_start
     is_start = False
@@ -527,5 +538,9 @@ if __name__ == "__main__":
     button_jietu = tk.Button(root, text=u"截图", command=lambda: MyThread(SavePic), width=15, height=2)
     button_jietu.place(relx=0.4, rely=0.95, width=200)
     button_jietu.pack()
+
+    button_jp = tk.Button(root, text=u"挤区", command=lambda: MyThread(jumpQueue), width=15, height=2)
+    button_jp.place(relx=0.4, rely=0.95, width=200)
+    button_jp.pack()
 
     root.mainloop()
