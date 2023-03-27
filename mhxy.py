@@ -428,7 +428,7 @@ def jumpQueue():
     is_start = True
     while is_start:
         get_rw("jq1")
-        time.sleep(2)
+        time.sleep(0.5)
         if get_rw("jq2"):
             get_rw("jq3")
             get_rw("jq4")
