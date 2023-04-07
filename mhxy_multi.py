@@ -484,7 +484,24 @@ def SavePic():
     img.save("./images/new.png")
     """
 
+def jumpQueue():
+    t = []
+    for windows in range(len(list_window_region)):
+        t.append(windows)
+        t[windows] = threading.Thread(target=jumpQueueAction, args=(windows,))
+        t[windows].daemon = True
+        t[windows].start()
 
+
+def jumpQueueAction(windows):
+    global is_start
+    is_start = True
+    while is_start:
+        get_rw("jq1", windows) or get_rw("jq5", windows)
+        time.sleep(0.5)
+        if get_rw("jq2", windows):
+            get_rw("jq3", windows)
+            get_rw("jq4", windows)
 class MyThread(threading.Thread):
     def __init__(self, func, *args):
         super().__init__()
@@ -569,6 +586,10 @@ if __name__ == "__main__":
     button_jietu = tk.Button(root, text=u"截图", command=lambda: MyThread(SavePic), width=15, height=2)
     button_jietu.place(relx=0.4, rely=0.95, width=200)
     button_jietu.pack()
+
+    button_jp = tk.Button(root, text=u"挤区", command=lambda: MyThread(jumpQueue), width=15, height=2)
+    button_jp.place(relx=0.4, rely=0.95, width=200)
+    button_jp.pack()
     
     getallwindowregion()
     print( list_window_region,len(list_window_region) )
